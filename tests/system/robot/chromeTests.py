@@ -93,7 +93,8 @@ def test_mark_aria_details():
 		"word"
 	)
 	# check that there is no summary reported
-	actualSpeech = _chrome.getSpeechAfterKey("NVDA+\\")
+	READ_DETAILS_GESTURE = "NVDA+\\"  # see chrome-gestures.ini
+	actualSpeech = _chrome.getSpeechAfterKey(READ_DETAILS_GESTURE)
 	_asserts.strings_match(
 		actualSpeech,
 		"No additional details"
@@ -105,10 +106,51 @@ def test_mark_aria_details():
 		"highlighted  has details  cat  out of highlighted"
 	)
 	# read the details summary
-	actualSpeech = _chrome.getSpeechAfterKey("NVDA+\\")
+	actualSpeech = _chrome.getSpeechAfterKey(READ_DETAILS_GESTURE)
 	_asserts.strings_match(
 		actualSpeech,
 		"Cats go woof BTW  Jonathon Commentor No they don't  Zara Submit"
+	)
+
+	# Reset caret
+	actualSpeech = _chrome.getSpeechAfterKey("upArrow")
+	_asserts.strings_match(
+		actualSpeech,
+		SPEECH_SEP.join([
+			"out of edit",
+			"Test page load complete",
+		])
+	)
+
+	# Force focus mode
+	actualSpeech = _chrome.getSpeechAfterKey("NVDA+space")
+	_asserts.strings_match(
+		actualSpeech,
+		"Focus mode"
+	)
+
+	# Tab into the contenteditable
+	actualSpeech = _chrome.getSpeechAfterKey("tab")
+	_asserts.strings_match(
+		actualSpeech,
+		SPEECH_SEP.join([
+			"edit",
+			"multi line",
+			"The word",  # content
+			"highlighted",
+			"cat",  # highlighted content
+			"out of highlighted",
+			"has a comment tied to it.",  # content
+		])
+	)
+
+	# Try to read the details
+	actualSpeech = _chrome.getSpeechAfterKey(READ_DETAILS_GESTURE)
+	_asserts.strings_match(
+		actualSpeech,
+		SPEECH_SEP.join([
+			"backslash",  # command not supported in focus mode
+		])
 	)
 
 
