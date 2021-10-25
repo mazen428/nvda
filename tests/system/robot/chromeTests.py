@@ -58,7 +58,7 @@ def checkbox_labelled_by_inner_element():
 def test_mark_aria_details():
 	_chrome.prepareChrome(
 		"""
-		<div>
+		<div class="editor" contenteditable spellcheck="false" role="textbox" aria-multiline="true">
 			<p>The word <mark aria-details="cat-details">cat</mark> has a comment tied to it.</p>
 			<div id="cat-details" role="comment">
 				Cats go woof BTW<br>&mdash;Jonathon Commentor
@@ -76,7 +76,15 @@ def test_mark_aria_details():
 	actualSpeech = _chrome.getSpeechAfterKey('downArrow')
 	_asserts.strings_match(
 		actualSpeech,
-		"The word  highlighted  has details  cat  out of highlighted  has a comment tied to it."
+		SPEECH_SEP.join([
+			"edit",
+			"multi line",
+			"The word",  # content
+			"highlighted", "has details",
+			"cat",  # highlighted content
+			"out of highlighted",
+			"has a comment tied to it.",  # content
+		])
 	)
 	# this word has no details attached
 	actualSpeech = _chrome.getSpeechAfterKey("control+rightArrow")
