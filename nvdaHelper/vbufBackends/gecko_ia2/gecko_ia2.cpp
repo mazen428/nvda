@@ -1134,10 +1134,12 @@ VBufStorage_fieldNode_t* GeckoVBufBackend_t::fillVBuf(
 		if (detailsControlFieldNode) {
 			std::wstring detailsSummary = L"";
 			detailsControlFieldNode->getTextInRange(0, detailsControlFieldNode->getLength(), detailsSummary, false);
+			parentNode->addAttribute(L"hasDetails", L"true");
 			parentNode->addAttribute(L"detailsSummary", detailsSummary);
 		}
 	}
 
+	//todo Re-review, add a test. What situation requires this?
 	std::optional<int> detailsForId = getRelationId(IA2_RELATION_DETAILS_FOR, pacc);
 	if (detailsForId) {
 		auto detailsControlFieldNode = buffer->getControlFieldNodeWithIdentifier(docHandle, detailsForId.value());

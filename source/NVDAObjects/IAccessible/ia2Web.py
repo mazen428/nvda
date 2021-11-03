@@ -8,7 +8,10 @@
 import typing
 from ctypes import c_short
 from comtypes import COMError, BSTR
+
+import IAccessibleHandler
 import oleacc
+import virtualBuffers.gecko_ia2
 from comInterfaces import IAccessible2Lib as IA2
 import controlTypes
 from logHandler import log
@@ -41,6 +44,18 @@ class Ia2Web(IAccessible):
 			if ia2attrDescriptionFrom:
 				log.debugWarning(f"Unknown 'description-from' IA2Attribute value: {ia2attrDescriptionFrom}")
 			return controlTypes.DescriptionFrom.UNKNOWN
+
+	def _get_detailsSummary(self) -> str:
+		vbuf = typing.cast(virtualBuffers.gecko_ia2.VirtualBuffer, self.treeInterceptor)
+		if not vbuf:
+			log.debugWarning("unable to get vbuf")
+			return ""
+		controlField = vbuf.getControlFieldForNVDAObject(self)
+		return controlField.get("detailsSummary", "")
+
+	@property
+	def hasDetails(self) -> bool:
+		return bool(self.detailsSummary)
 
 	def _get_isCurrent(self) -> controlTypes.IsCurrent:
 		ia2attrCurrent: str = self.IA2Attributes.get("current", "false")
