@@ -3,7 +3,7 @@
 # Thomas Stivers, Accessolutions, Julien Cochuyt
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
-
+import typing
 from typing import Any, Callable, Union
 import os
 import itertools
@@ -1408,14 +1408,27 @@ class BrowseModeDocumentTreeInterceptor(documentBase.DocumentWithTableNavigation
 		)
 	)
 	def script_activateAriaDetailsSummary(self, gesture):
-		info = self.makeTextInfo(textInfos.POSITION_CARET)
+		info: textInfos.TextInfo = self.makeTextInfo(textInfos.POSITION_CARET)
 		info.expand("character")
-		for field in reversed(info.getTextWithFields()):
-			if isinstance(field, textInfos.FieldCommand) and field.command == "controlStart":
-				states = field.field.get('states')
-				if states and controlTypes.State.HAS_ARIA_DETAILS in states:
-					ui.message(field.field['detailsSummary'])
-					return
+		info.obj.treeInterceptor
+
+		innerToOuterObj: typing.List[NVDAObject] = (
+			field.obj
+			for field in reversed(info.getTextWithFields)
+			if (
+				isinstance(field, textInfos.FieldCommand)
+				and field.command == "controlStart"
+			)
+		)
+		innerToOuterDetailsSummary = (
+			obj
+			for obj in innerToOuterObj
+			if obj and obj.detailSummary
+		)
+		for summary in innerToOuterDetailsSummary:
+			ui.message(summary)
+			# only speak the most inner summary
+			return
 
 		# Translators: the message presented when the activateAriaDetailsSummary script cannot locate a
 		# set of details to read.
