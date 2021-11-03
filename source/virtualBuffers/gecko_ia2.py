@@ -91,6 +91,7 @@ class Gecko_ia2_TextInfo(VirtualBufferTextInfo):
 
 		attrs["_description-from"] = self._calculateDescriptionFrom(attrs)
 		attrs.update(_getNormalizedCurrentAttrs(attrs))
+		# does has details need to be exposed from here explicitly?
 
 		placeholder = self._getPlaceholderAttribute(attrs, "IAccessible2::attribute_placeholder")
 		if placeholder is not None:
@@ -106,8 +107,6 @@ class Gecko_ia2_TextInfo(VirtualBufferTextInfo):
 			# This is a text leaf.
 			# See NVDAObjects.Iaccessible.mozilla.findOverlayClasses for an explanation of these checks.
 			role = controlTypes.Role.STATICTEXT
-		if attrs.get("detailsSummary") is not None:
-			states.add(controlTypes.State.HAS_ARIA_DETAILS)
 		if attrs.get("IAccessibleAction_showlongdesc") is not None:
 			states.add(controlTypes.State.HASLONGDESC)
 		if "IAccessibleAction_click" in attrs:

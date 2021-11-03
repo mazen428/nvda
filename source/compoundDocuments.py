@@ -136,7 +136,7 @@ class CompoundTextInfo(textInfos.TextInfo):
 			and controlTypes.State.LINKED not in obj.states
 		)
 
-	def _getControlFieldForObject(self, obj, ignoreEditableText=True):
+	def _getControlFieldForObject(self, obj: NVDAObject, ignoreEditableText=True):
 		if ignoreEditableText and self._isObjectEditableText(obj):
 			# This is basically just a text node.
 			return None
@@ -150,6 +150,8 @@ class CompoundTextInfo(textInfos.TextInfo):
 		field['roleText'] = obj.roleText
 		field['description'] = obj.description
 		field['_description-from'] = obj.descriptionFrom
+		field['hasDetails'] = obj.hasDetails
+		field['detailsSummary'] = obj.detailsSummary
 		# The user doesn't care about certain states, as they are obvious.
 		states.discard(controlTypes.State.EDITABLE)
 		states.discard(controlTypes.State.MULTILINE)
