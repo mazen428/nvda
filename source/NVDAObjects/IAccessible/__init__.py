@@ -1450,6 +1450,8 @@ the NVDAObject for IAccessible
 		return list(relations)
 
 	def _getIA2RelationFirstTarget(self, relationType):
+		# we can probably use element->get_relationTargetsOfType rather than _get__IA2Relations (which uses https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible2.html#a967f0dffba760744b5963f42bb7be8ed)
+		# see https://accessibility.linuxfoundation.org/a11yspecs/ia2/docs/html/interface_i_accessible2__2.html#a63f214b322c663caf01d4bb67277f5af
 		for relation in self._IA2Relations:
 			try:
 				if relation.relationType == relationType:

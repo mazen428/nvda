@@ -13,6 +13,7 @@ import NVDAObjects.behaviors
 import winUser
 import mouseHandler
 import IAccessibleHandler
+from IAccessibleHandler import IA2_RELATION_CONTAINING_DOCUMENT
 import oleacc
 from logHandler import log
 import textInfos
@@ -22,9 +23,6 @@ from comtypes import COMError
 import aria
 import config
 from NVDAObjects.IAccessible import normalizeIA2TextFormatField, IA2TextTextInfo
-
-IA2_RELATION_CONTAINING_DOCUMENT = "containingDocument"
-
 
 def _getNormalizedCurrentAttrs(attrs: textInfos.ControlField) -> typing.Dict[str, typing.Any]:
 	valForCurrent = attrs.get("IAccessible2::attribute_current", "false")

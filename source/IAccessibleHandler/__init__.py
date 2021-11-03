@@ -55,6 +55,9 @@ NAVRELATION_EMBEDS = 0x1009
 # IAccessible2 relations (not included in the typelib)
 IA2_RELATION_FLOWS_FROM = "flowsFrom"
 IA2_RELATION_FLOWS_TO = "flowsTo"
+IA2_RELATION_CONTAINING_DOCUMENT = "containingDocument"
+IA2_RELATION_DETAILS = "details"
+IA2_RELATION_DETAILS_FOR = "detailsFor"
 
 # A place to store live IAccessible NVDAObjects, that can be looked up by their window,objectID,
 # childID event params.
